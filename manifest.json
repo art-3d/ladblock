@@ -1,0 +1,19 @@
+{
+    "name": "ladblock",
+    "version": "1.0",
+    "description": "Removes most of useless ads from the web pages",
+    "manifest_version": 2,
+    "permissions": [
+        "activeTab",
+        "storage",
+        "declarativeContent"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "js": ["ad_cleaner.js"],
+            "run_at": "document_idle",
+            "all_frames": true
+        }
+    ]
+}
