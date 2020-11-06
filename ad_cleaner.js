@@ -1,6 +1,19 @@
 const knownSelectorsToRemove = [
   '.sidebar_right_ad',
   'yatag',
+  '.flat_pm_out',
+]
+const knownHrefsToRemove = [
+  'oqwrba',
+  'ad.',
+  'click',
+]
+const knownHostsToIgnore = [
+  'mail.google.com',
+  'drive.google.com',
+  'translate.google.com',
+  'console.cloud.google.com',
+  'map.land.gov.ua',
 ]
 const knownSelectorsToClick = [
   { selector: '.close', host: 'dou.ua' },
@@ -47,10 +60,32 @@ const removeGoogleAdsIframe = () => {
   }
 }
 
+const removeKnownHrefOnA = () => {
+  const as = document.querySelectorAll('a')
+
+  if (as) {
+    as.forEach(a => {
+      const href = a.getAttribute('href')
+      if (href) {
+        knownHrefsToRemove.forEach(targetHref => {
+          if (href.includes(targetHref)) {
+            a.parentNode.removeChild(a)
+          }
+        })
+      }
+    })
+  }
+}
+
 const main = () => {
+  if (knownHostsToIgnore.includes(document.location.host)) {
+    return
+  }
+
   removeKnownSelectors()
   clickKnownSelectors()
   removeGoogleAdsIframe()
+  removeKnownHrefOnA()
 
   if (i < 50) {
     setTimeout(main, 1000)
