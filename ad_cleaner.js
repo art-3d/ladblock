@@ -2,6 +2,7 @@ const knownSelectorsToRemove = [
   '.sidebar_right_ad',
   'yatag',
   '.flat_pm_out',
+  '.roxotAd'
 ]
 const knownHrefsToRemove = [
   'oqwrba',
@@ -14,9 +15,13 @@ const knownHostsToIgnore = [
   'translate.google.com',
   'console.cloud.google.com',
   'map.land.gov.ua',
+  'news.ycombinator.com',
+  'tagmanager.google.com',
+  'wikipedia.org',
 ]
 const knownSelectorsToClick = [
   { selector: '.close', host: 'dou.ua' },
+  { selector: '.flash-alert .js-close-icon', host: 'gitlab.com' },
 ]
 let i = 0;
 
@@ -68,7 +73,7 @@ const removeKnownHrefOnA = () => {
       const href = a.getAttribute('href')
       if (href) {
         knownHrefsToRemove.forEach(targetHref => {
-          if (href.includes(targetHref)) {
+          if (href.includes(targetHref) && a.parentNode) {
             a.parentNode.removeChild(a)
           }
         })
@@ -78,7 +83,9 @@ const removeKnownHrefOnA = () => {
 }
 
 const main = () => {
-  if (knownHostsToIgnore.includes(document.location.host)) {
+  const domain = document.location.host.replace(/.+\.(.+\..+)/, '$1')
+
+  if (knownHostsToIgnore.includes(domain)) {
     return
   }
 
